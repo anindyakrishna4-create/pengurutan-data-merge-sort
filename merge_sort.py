@@ -7,27 +7,29 @@ def merge_sort(data_list):
     HISTORY = []
     
     # Panggil fungsi rekursif utama
-    _merge_sort_recursive(data_list, 0, len(data_list) - 1)
+    # Kita menggunakan copy agar array awal tidak termodifikasi saat rekursi
+    _merge_sort_recursive(data_list[:], 0, len(data_list) - 1, data_list) 
     
     # Tambahkan state terakhir (selesai)
-    HISTORY.append({'array': data_list[:], 'highlight': (-1, -1, -1, 'Selesai'), 'action': 'Pengurutan Selesai'})
+    # Highlight: 5 elemen (start, end, idx_left, idx_right, action_type)
+    HISTORY.append({'array': data_list[:], 'highlight': (-1, -1, -1, -1, 'Selesai'), 'action': 'Pengurutan Selesai'})
     
     return data_list, HISTORY
 
-def _merge_sort_recursive(arr, start_idx, end_idx):
+def _merge_sort_recursive(arr, start_idx, end_idx, original_arr):
     if start_idx >= end_idx:
         return
     
     mid_idx = (start_idx + end_idx) // 2
     
     # 1. Fase Divide (Rekursi)
-    _merge_sort_recursive(arr, start_idx, mid_idx)
-    _merge_sort_recursive(arr, mid_idx + 1, end_idx)
+    _merge_sort_recursive(arr, start_idx, mid_idx, original_arr)
+    _merge_sort_recursive(arr, mid_idx + 1, end_idx, original_arr)
     
     # 2. Fase Merge (Gabungkan)
-    _merge(arr, start_idx, mid_idx, end_idx)
+    _merge(arr, start_idx, mid_idx, end_idx, original_arr)
     
-def _merge(arr, start, mid, end):
+def _merge(arr, start, mid, end, original_arr):
     
     left_sub = arr[start:mid + 1]
     right_sub = arr[mid + 1:end + 1]
@@ -41,7 +43,8 @@ def _merge(arr, start, mid, end):
         # Catat state saat Perbandingan
         HISTORY.append({
             'array': arr[:],
-            'highlight': (start, end, start + i, mid + 1 + j, 'Bandingkan'), # Rentang, Kiri, Kanan
+            # Highlight: (start_merge, end_merge, index_kiri, index_kanan, tipe_aksi)
+            'highlight': (start, end, start + i, mid + 1 + j, 'Bandingkan'), 
             'action': f'Membandingkan: Sub-array Kiri[{start+i}] dan Kanan[{mid+1+j}]'
         })
         
@@ -54,13 +57,11 @@ def _merge(arr, start, mid, end):
         
         k += 1
 
-    # Tambahkan sisa elemen kiri (jika ada)
+    # Tambahkan sisa elemen
     while i < len(left_sub):
         arr[k] = left_sub[i]
         k += 1
         i += 1
-
-    # Tambahkan sisa elemen kanan (jika ada)
     while j < len(right_sub):
         arr[k] = right_sub[j]
         k += 1
@@ -69,7 +70,8 @@ def _merge(arr, start, mid, end):
     # Catat state setelah Merge Selesai
     HISTORY.append({
         'array': arr[:],
-        'highlight': (start, end, -1, -1, 'Gabung Selesai'), # start dan end: rentang yang baru diurutkan
+        # Highlight: (start_merge, end_merge, -1, -1, tipe_aksi)
+        'highlight': (start, end, -1, -1, 'Gabung Selesai'), 
         'action': f'MERGE SELESAI: Rentang Indeks [{start} hingga {end}] kini terurut.'
     })
     
