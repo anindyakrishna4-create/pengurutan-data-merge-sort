@@ -42,7 +42,7 @@ st.write(f"**Data Awal:** {initial_data}")
 # --- Visualisasi Awal ---
 if st.button("Mulai Simulasi Merge Sort"):
     
-    sorted_data, history = merge_sort(data_list)
+    sorted_data, history = merge_sort(list(data_list)) # Menggunakan list(data_list) untuk memastikan fungsi mendapat salinan data awal
     
     st.markdown("---")
     st.subheader("Visualisasi Langkah Demi Langkah")
@@ -52,7 +52,7 @@ if st.button("Mulai Simulasi Merge Sort"):
     # --- Loop Simulasi ---
     for step, state in enumerate(history):
         current_array = state['array']
-        # Pastikan format ini konsisten dengan merge_sort.py yang telah diperbaiki
+        # UNPACKING 5 ELEMEN: Konsisten dengan merge_sort.py
         (start, end, idx_left, idx_right, action_type) = state['highlight']
         action = state['action']
 
