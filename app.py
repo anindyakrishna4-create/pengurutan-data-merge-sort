@@ -1,3 +1,5 @@
+# File: app.py
+
 import streamlit as st
 import pandas as pd
 import time
@@ -42,7 +44,7 @@ st.write(f"**Data Awal:** {initial_data}")
 # --- Visualisasi Awal ---
 if st.button("Mulai Simulasi Merge Sort"):
     
-    # Kirim data ke fungsi pengurutan
+    # PENTING: Kirim data_list sebagai salinan baru agar Merge Sort bisa memodifikasinya
     sorted_data, history = merge_sort(list(data_list))
     
     st.markdown("---")
@@ -50,7 +52,7 @@ if st.button("Mulai Simulasi Merge Sort"):
     
     vis_placeholder = st.empty()
     
-    # --- Loop Simulasi ---
+    # --- Loop Simulasi --- (Dipastikan indentasi 4 spasi)
     for step, state in enumerate(history):
         current_array = state['array']
         # UNPACKING 5 ELEMEN: (start, end, idx_left, idx_right, action_type)
